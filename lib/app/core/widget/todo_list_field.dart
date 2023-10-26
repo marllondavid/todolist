@@ -47,12 +47,9 @@ class TodoListField extends StatelessWidget {
                         onPressed: () {
                           obscureTextVN.value = !obscureTextValue;
                         },
-                        icon: Icon(
-                          !obscureTextValue
-                              ? TodoListIcon.eye_slash
-                              : TodoListIcon.eye,
-                          size: 15,
-                        ),
+                        icon: Icon(!obscureTextValue
+                            ? TodoListIcons.eye_slash
+                            : TodoListIcons.eye),
                       )
                     : null),
           ),
