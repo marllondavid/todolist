@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todolist/app/core/ui/theme_extension.dart';
 import 'package:todolist/app/core/validatos/validators.dart';
 import 'package:todolist/app/core/widget/todo_list_field.dart';
 import 'package:todolist/app/core/widget/todo_list_logo.dart';
+import 'package:todolist/app/modules/auth/register/register_controller.dart';
 import 'package:validatorless/validatorless.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -24,6 +26,24 @@ class _RegisterPageState extends State<RegisterPage> {
     _passwordEC.dispose();
     _confirmPasswordEC.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final controller = context.read<RegisterController>();
+    var sucess = controller.sucess;
+    var error = controller.error;
+    if (sucess) {
+      Navigator.of(context).pop();
+    } else if (error != null && error.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -120,6 +140,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       onPressed: () {
                         final formValid =
                             _formKey.currentState?.validate() ?? false;
+                        if (formValid) {
+                          final email = _emailEC.text;
+                          final password = _passwordEC.text;
+                          context
+                              .read<RegisterController>()
+                              .registerUser(email, password);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
